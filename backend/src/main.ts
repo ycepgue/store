@@ -10,8 +10,12 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
+  const corsOrigins = process.env.CORS_ORIGINS
+    ? process.env.CORS_ORIGINS.split(',').map((origin) => origin.trim())
+    : ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:3002'];
+
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:3002'],
+    origin: corsOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
   });
