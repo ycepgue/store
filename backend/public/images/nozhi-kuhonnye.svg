@@ -1,0 +1,85 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5f0e8"/>
+      <stop offset="100%" stop-color="#e8e0d0"/>
+    </linearGradient>
+    <linearGradient id="blade1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d0d0d0"/>
+      <stop offset="40%" stop-color="#f0f0f0"/>
+      <stop offset="60%" stop-color="#e0e0e0"/>
+      <stop offset="100%" stop-color="#b0b0b0"/>
+    </linearGradient>
+    <linearGradient id="blade2" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#b0b0b0"/>
+      <stop offset="40%" stop-color="#e8e8e8"/>
+      <stop offset="100%" stop-color="#c8c8c8"/>
+    </linearGradient>
+    <linearGradient id="handle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4a2810"/>
+      <stop offset="50%" stop-color="#5c3618"/>
+      <stop offset="100%" stop-color="#3a1a08"/>
+    </linearGradient>
+    <linearGradient id="wood" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#8a6a40"/>
+      <stop offset="50%" stop-color="#7a5a30"/>
+      <stop offset="100%" stop-color="#6a4a20"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="2" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  <rect width="400" height="400" rx="24" fill="url(#bg)"/>
+  <!-- Cutting board -->
+  <rect x="80" y="160" width="240" height="160" rx="8" fill="url(#wood)" filter="url(#shadow)"/>
+  <rect x="80" y="160" width="240" height="160" rx="8" fill="rgba(0,0,0,0.05)"/>
+  <!-- Board grain -->
+  <g stroke="rgba(0,0,0,0.04)" stroke-width="0.5">
+    <line x1="85" y1="180" x2="315" y2="180"/>
+    <line x1="85" y1="200" x2="315" y2="200"/>
+    <line x1="85" y1="220" x2="315" y2="220"/>
+    <line x1="85" y1="240" x2="315" y2="240"/>
+    <line x1="85" y1="260" x2="315" y2="260"/>
+    <line x1="85" y1="280" x2="315" y2="280"/>
+  </g>
+  <!-- Knife 1 - Chef knife (large, center) -->
+  <g filter="url(#shadow)" transform="rotate(-15, 200, 200)">
+    <path d="M 170 110 L 120 220 L 165 220 Z" fill="url(#blade1)"/>
+    <path d="M 120 220 L 165 220 L 170 230 L 150 230 Z" fill="url(#handle)"/>
+    <!-- Blade edge highlight -->
+    <line x1="170" y1="110" x2="120" y2="220" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <!-- Bolster -->
+    <rect x="163" y="218" width="8" height="4" rx="1" fill="#888"/>
+    <!-- Rivets -->
+    <circle cx="155" cy="225" r="2" fill="rgba(255,255,255,0.1)"/>
+    <circle cx="160" cy="225" r="2" fill="rgba(255,255,255,0.1)"/>
+  </g>
+  <!-- Knife 2 - Paring knife (small, left) -->
+  <g filter="url(#shadow)" transform="rotate(10, 140, 240)">
+    <path d="M 140 180 L 115 235 L 140 235 Z" fill="url(#blade2)"/>
+    <path d="M 115 235 L 140 235 L 142 242 L 130 242 Z" fill="url(#handle)"/>
+    <line x1="140" y1="180" x2="115" y2="235" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/>
+    <rect x="138" y="233" width="5" height="3" rx="1" fill="#888"/>
+  </g>
+  <!-- Knife 3 - Serrated (top right) -->
+  <g filter="url(#shadow)" transform="rotate(-35, 260, 190)">
+    <path d="M 180 120 L 230 210 L 195 210 Z" fill="url(#blade1)"/>
+    <path d="M 230 210 L 195 210 L 193 218 L 210 218 Z" fill="url(#handle)"/>
+    <!-- Serrated edge hints -->
+    <g fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="0.5">
+      <path d="M 185 140 Q 188 145 185 150"/>
+      <path d="M 195 160 Q 198 165 195 170"/>
+      <path d="M 205 180 Q 208 185 205 190"/>
+    </g>
+    <rect x="196" y="208" width="5" height="3" rx="1" fill="#888"/>
+  </g>
+  <!-- Knife 4 - Utility (bottom left, offset) -->
+  <g filter="url(#shadow)" transform="rotate(20, 150, 270)">
+    <path d="M 150 200 L 130 245 L 152 245 Z" fill="url(#blade2)"/>
+    <path d="M 130 245 L 152 245 L 154 251 L 140 251 Z" fill="url(#handle)"/>
+    <line x1="150" y1="200" x2="130" y2="245" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/>
+  </g>
+  <!-- Price -->
+  <rect x="140" y="340" width="120" height="26" rx="6" fill="rgba(0,0,0,0.05)"/>
+  <text x="200" y="357" font-size="12" font-family="Arial,sans-serif" text-anchor="middle" fill="rgba(0,0,0,0.6)">4 990 ₽</text>
+</svg>

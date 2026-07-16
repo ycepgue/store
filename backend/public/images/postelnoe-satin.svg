@@ -1,0 +1,59 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e8e0f0"/>
+      <stop offset="100%" stop-color="#d8d0e8"/>
+    </linearGradient>
+    <linearGradient id="sheet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5f0ff"/>
+      <stop offset="50%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#ede5f5"/>
+    </linearGradient>
+    <linearGradient id="satinShine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0)"/>
+      <stop offset="30%" stop-color="rgba(255,255,255,0.3)"/>
+      <stop offset="50%" stop-color="rgba(255,255,255,0.1)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+  <rect width="400" height="400" rx="24" fill="url(#bg)"/>
+  <!-- Bed sheet folded -->
+  <g filter="url(#shadow)">
+    <!-- Bottom sheet -->
+    <rect x="60" y="120" width="280" height="200" rx="4" fill="url(#sheet)"/>
+    <rect x="60" y="120" width="280" height="200" rx="4" fill="url(#satinShine)"/>
+    <!-- Fold line -->
+    <path d="M 60 160 L 340 160" stroke="rgba(0,0,0,0.03)" stroke-width="1"/>
+    <!-- Top fold (reflective) -->
+    <rect x="60" y="120" width="280" height="40" rx="4" fill="rgba(255,255,255,0.15)"/>
+    <!-- Embroidery / decorative border -->
+    <rect x="70" y="135" width="260" height="2" fill="#d4c5e8" opacity="0.5"/>
+    <rect x="70" y="125" width="260" height="1" fill="#d4c5e8" opacity="0.3"/>
+    <!-- Satin texture lines -->
+    <g stroke="rgba(255,255,255,0.08)" stroke-width="0.5">
+      <line x1="65" y1="170" x2="335" y2="170"/>
+      <line x1="65" y1="195" x2="335" y2="195"/>
+      <line x1="65" y1="220" x2="335" y2="220"/>
+      <line x1="65" y1="245" x2="335" y2="245"/>
+      <line x1="65" y1="270" x2="335" y2="270"/>
+    </g>
+    <!-- Fold shadow on right -->
+    <rect x="310" y="160" width="30" height="160" fill="rgba(0,0,0,0.03)"/>
+    <!-- Pillowcase (decorative) -->
+    <rect x="75" y="160" width="60" height="45" rx="2" fill="#f0eaf8" transform="rotate(-5, 105, 182)"/>
+    <rect x="75" y="160" width="60" height="45" rx="2" fill="rgba(255,255,255,0.15)" transform="rotate(-5, 105, 182)"/>
+    <rect x="78" y="163" width="54" height="2" fill="#d4c5e8" opacity="0.4" transform="rotate(-5, 105, 182)"/>
+    <!-- Pillowcase 2 -->
+    <rect x="145" y="158" width="60" height="45" rx="2" fill="#f0eaf8" transform="rotate(3, 175, 180)"/>
+    <rect x="145" y="158" width="60" height="45" rx="2" fill="rgba(255,255,255,0.15)" transform="rotate(3, 175, 180)"/>
+  </g>
+  <!-- Fabric swatch corners -->
+  <rect x="65" y="125" width="6" height="6" rx="1" fill="#d4c5e8" opacity="0.3"/>
+  <rect x="329" y="125" width="6" height="6" rx="1" fill="#d4c5e8" opacity="0.3"/>
+  <!-- Price tag -->
+  <rect x="140" y="340" width="120" height="26" rx="6" fill="rgba(0,0,0,0.05)"/>
+  <text x="200" y="357" font-size="12" font-family="Arial,sans-serif" text-anchor="middle" fill="rgba(0,0,0,0.6)">3 990 ₽</text>
+</svg>

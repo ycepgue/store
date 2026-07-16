@@ -1,0 +1,86 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b1b2f"/>
+      <stop offset="100%" stop-color="#2d2d44"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="50%" stop-color="#283593"/>
+      <stop offset="100%" stop-color="#1a237e"/>
+    </linearGradient>
+    <linearGradient id="base" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3d3d4a"/>
+      <stop offset="100%" stop-color="#2a2a35"/>
+    </linearGradient>
+    <linearGradient id="screenGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="rgba(79,195,247,0.08)"/>
+      <stop offset="100%" stop-color="rgba(79,195,247,0.02)"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+  <rect width="400" height="400" rx="24" fill="url(#bg)"/>
+  <!-- Screen lid -->
+  <g filter="url(#shadow)">
+    <rect x="75" y="40" width="250" height="175" rx="8" fill="#1a1a2e"/>
+    <!-- Screen display -->
+    <rect x="85" y="50" width="230" height="150" rx="4" fill="url(#screen)"/>
+    <rect x="85" y="50" width="230" height="150" rx="4" fill="url(#screenGlow)"/>
+    <!-- Desktop wallpaper - gradient bars -->
+    <rect x="85" y="50" width="230" height="150" rx="4" fill="url(#screenGlow)"/>
+    <!-- Desktop icons -->
+    <rect x="100" y="65" width="12" height="12" rx="2" fill="rgba(255,255,255,0.1)"/>
+    <rect x="100" y="82" width="12" height="12" rx="2" fill="rgba(255,255,255,0.1)"/>
+    <rect x="100" y="99" width="12" height="12" rx="2" fill="rgba(255,255,255,0.1)"/>
+    <!-- Window -->
+    <rect x="140" y="65" width="60" height="45" rx="3" fill="rgba(255,255,255,0.06)"/>
+    <rect x="140" y="65" width="60" height="3" rx="1" fill="rgba(255,255,255,0.1)"/>
+    <!-- Dock -->
+    <rect x="160" y="175" width="80" height="8" rx="4" fill="rgba(255,255,255,0.08)"/>
+    <!-- Notch/camera bump -->
+    <rect x="195" y="48" width="10" height="3" rx="1.5" fill="#1a1a2e"/>
+    <circle cx="200" cy="49.5" r="1" fill="#333"/>
+  </g>
+  <!-- Base / keyboard -->
+  <g filter="url(#shadow)">
+    <path d="M 60 215 L 340 215 L 330 270 L 70 270 Z" fill="url(#base)"/>
+    <!-- Tapered front -->
+    <path d="M 70 270 L 330 270 L 320 280 L 80 280 Z" fill="#22222d"/>
+    <!-- Keyboard area -->
+    <rect x="90" y="225" width="120" height="35" rx="2" fill="rgba(0,0,0,0.2)"/>
+    <!-- Keys row 1 -->
+    <g fill="rgba(255,255,255,0.06)">
+      <rect x="95" y="228" width="12" height="7" rx="1"/>
+      <rect x="110" y="228" width="12" height="7" rx="1"/>
+      <rect x="125" y="228" width="12" height="7" rx="1"/>
+      <rect x="140" y="228" width="12" height="7" rx="1"/>
+      <rect x="155" y="228" width="12" height="7" rx="1"/>
+      <rect x="170" y="228" width="12" height="7" rx="1"/>
+      <rect x="185" y="228" width="12" height="7" rx="1"/>
+    </g>
+    <!-- Keys row 2 -->
+    <g fill="rgba(255,255,255,0.06)">
+      <rect x="98" y="238" width="12" height="7" rx="1"/>
+      <rect x="113" y="238" width="12" height="7" rx="1"/>
+      <rect x="128" y="238" width="12" height="7" rx="1"/>
+      <rect x="143" y="238" width="12" height="7" rx="1"/>
+      <rect x="158" y="238" width="12" height="7" rx="1"/>
+      <rect x="173" y="238" width="12" height="7" rx="1"/>
+    </g>
+    <!-- Trackpad -->
+    <rect x="160" y="248" width="50" height="12" rx="2" fill="rgba(0,0,0,0.15)"/>
+    <!-- Keys row 3 -->
+    <g fill="rgba(255,255,255,0.06)">
+      <rect x="100" y="248" width="12" height="7" rx="1"/>
+      <rect x="115" y="248" width="12" height="7" rx="1"/>
+      <rect x="130" y="248" width="12" height="7" rx="1"/>
+    </g>
+    <!-- Hinge -->
+    <rect x="195" y="213" width="10" height="4" rx="1" fill="#222"/>
+  </g>
+  <!-- Price -->
+  <rect x="140" y="295" width="120" height="26" rx="6" fill="rgba(255,255,255,0.08)"/>
+  <text x="200" y="312" font-size="12" font-family="Arial,sans-serif" text-anchor="middle" fill="rgba(255,255,255,0.7)">124 990 ₽</text>
+</svg>
