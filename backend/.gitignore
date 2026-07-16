@@ -1,7 +1,40 @@
+# Dependencies
 node_modules
 pnpm-lock.yaml
-# Keep environment variables out of version control
-.env
 
-/generated/prisma
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Build output
 dist
+
+# Generated
+/generated/prisma
+
+# Logs
+*.log
+*.err
+backend.err
+backend.log
+backend.pid
+npm-debug.log*
+pnpm-debug.log*
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage
+
+# TypeScript
+*.tsbuildinfo
