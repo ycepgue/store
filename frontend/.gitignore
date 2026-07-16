@@ -3,6 +3,8 @@ node_modules
 
 # Build output
 dist
+.nuxt
+.output
 
 # Environment variables
 .env
@@ -30,4 +32,3 @@ pnpm-debug.log*
 
 # Vue
 components.json
-typed-router.d.ts
