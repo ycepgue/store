@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import { refDebounced } from '@vueuse/core'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,27 +18,46 @@ import { firstImage } from '@/lib/utils'
 const route = useRoute()
 const router = useRouter()
 
-useSeoMeta({
-  title: 'Каталог товаров — Store',
-  description: 'Полный каталог товаров: электроника, аксессуары и многое другое.',
-})
-
 const { addItem } = useCart()
 
-const search = ref('')
+// All filters are initialised from the URL so the listing is server-rendered
+// and the current view is shareable / restorable on reload.
+const firstQueryValue = (v: unknown) => (Array.isArray(v) ? v[0] : v)
+
+const searchInput = ref(String(firstQueryValue(route.query.search) ?? ''))
+// Debounce the value that drives fetching + the URL so typing doesn't spam the
+// backend or the history.
+const debouncedSearch = refDebounced(searchInput, 350)
+
+const categoryIdRaw = Number(firstQueryValue(route.query.categoryId))
 const selectedCategoryId = ref<number | null>(
-  route.query.categoryId ? Number(route.query.categoryId) : null,
+  Number.isFinite(categoryIdRaw) && categoryIdRaw > 0 ? categoryIdRaw : null,
 )
-const page = ref(1)
+
+const pageRaw = Number(firstQueryValue(route.query.page))
+const page = ref(Number.isFinite(pageRaw) && pageRaw > 0 ? pageRaw : 1)
+
 const limit = 12
 
-watch(selectedCategoryId, (id) => {
-  router.replace({ query: id ? { categoryId: id } : {} })
+// Changing a filter resets pagination to the first page.
+watch([debouncedSearch, selectedCategoryId], () => {
+  page.value = 1
+})
+
+// Reflect the current state in the URL. Non-immediate, so it runs only on the
+// client and never rewrites the URL on initial load. `replace` keeps filter
+// changes out of the browser history.
+watch([debouncedSearch, selectedCategoryId, page], () => {
+  const q: Record<string, string> = {}
+  if (selectedCategoryId.value) q.categoryId = String(selectedCategoryId.value)
+  if (debouncedSearch.value) q.search = debouncedSearch.value
+  if (page.value > 1) q.page = String(page.value)
+  router.replace({ query: q })
 })
 
 const query = computed(() => ({
   categoryId: selectedCategoryId.value ?? undefined,
-  search: search.value || undefined,
+  search: debouncedSearch.value || undefined,
   page: page.value,
   limit,
   sortBy: 'createdAt' as const,
@@ -52,16 +72,29 @@ const total = computed(() => productsData.value?.total ?? 0)
 const totalPages = computed(() => productsData.value?.totalPages ?? 0)
 const categories = computed(() => categoriesData.value ?? [])
 
+const currentCategory = computed(() =>
+  categories.value.find(c => c.id === selectedCategoryId.value),
+)
+
+useSeoMeta({
+  title: () => {
+    if (debouncedSearch.value) return `Поиск: ${debouncedSearch.value} — Store`
+    if (currentCategory.value) return `${currentCategory.value.name} — Store`
+    return 'Каталог товаров — Store'
+  },
+  description: 'Полный каталог товаров: электроника, аксессуары и многое другое.',
+})
+
 const priceFormat = (n: number) =>
   new Intl.NumberFormat('ru-RU').format(n) + ' ₽'
 
 function selectCategory(id: number | null) {
   selectedCategoryId.value = id
-  page.value = 1
 }
 
-function onSearch() {
-  page.value = 1
+function resetFilters() {
+  searchInput.value = ''
+  selectedCategoryId.value = null
 }
 </script>
 
@@ -98,9 +131,8 @@ function onSearch() {
       </div>
       <div class="w-full sm:w-64">
         <Input
-          v-model="search"
+          v-model="searchInput"
           placeholder="Поиск по названию..."
-          @keyup.enter="onSearch"
         />
       </div>
     </div>
@@ -181,7 +213,7 @@ function onSearch() {
       <p class="text-sm text-muted-foreground">
         Попробуйте изменить параметры поиска
       </p>
-      <Button variant="outline" size="sm" @click="search = ''; selectedCategoryId = null; page = 1">
+      <Button variant="outline" size="sm" @click="resetFilters()">
         Сбросить фильтры
       </Button>
     </div>
