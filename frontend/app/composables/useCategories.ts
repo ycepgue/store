@@ -1,11 +1,10 @@
-import { useQuery } from '@tanstack/vue-query'
 import { fetchCategories } from '@/api'
 
-const CATEGORIES_KEY = 'categories'
-
 export function useCategories() {
-  return useQuery({
-    queryKey: [CATEGORIES_KEY],
-    queryFn: fetchCategories,
+  const asyncData = useAsyncData('categories', fetchCategories)
+
+  return Object.assign(asyncData, {
+    isLoading: computed(() => asyncData.status.value === 'pending'),
+    isError: computed(() => asyncData.status.value === 'error'),
   })
 }

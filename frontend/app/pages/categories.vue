@@ -8,8 +8,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const router = useRouter()
+
+useSeoMeta({
+  title: 'Категории — Store',
+  description: 'Выберите категорию для поиска товаров.',
+})
+
 const { data: categoriesData, isLoading } = useCategories()
 const categories = computed(() => categoriesData.value ?? [])
 
@@ -36,9 +43,21 @@ const categoryIcons: Record<string, string> = {
 
     <div
       v-if="isLoading"
-      class="flex items-center justify-center py-16 text-muted-foreground"
+      class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
-      Загрузка...
+      <Card v-for="i in 8" :key="i" class="flex min-h-43 flex-col">
+        <CardHeader class="flex flex-row items-center gap-4 pb-2">
+          <Skeleton class="size-8 rounded-full" />
+          <Skeleton class="h-4 w-24" />
+        </CardHeader>
+        <CardContent class="flex-1 flex flex-col justify-between gap-3">
+          <div class="space-y-2">
+            <Skeleton class="h-3 w-full" />
+            <Skeleton class="h-3 w-2/3" />
+          </div>
+          <Skeleton class="mt-3 h-4 w-28" />
+        </CardContent>
+      </Card>
     </div>
 
     <div
@@ -48,7 +67,7 @@ const categoryIcons: Record<string, string> = {
       <Card
         v-for="cat in categories"
         :key="cat.id"
-        class="flex flex-col cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg"
+        class="flex min-h-43 flex-col cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg"
         @click="router.push(`/products?categoryId=${cat.id}`)"
       >
         <CardHeader class="flex flex-row items-center gap-4 pb-2">

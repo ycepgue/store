@@ -1,13 +1,15 @@
-import { useQuery } from '@tanstack/vue-query'
 import { fetchProduct } from '@/api'
-import { computed, type Ref } from 'vue'
-
-const PRODUCT_KEY = 'product'
+import type { Ref } from 'vue'
 
 export function useProduct(id: Ref<number | string>) {
-  return useQuery({
-    queryKey: computed(() => [PRODUCT_KEY, id.value]),
-    queryFn: () => fetchProduct(Number(id.value)),
-    enabled: computed(() => !!id.value),
+  const asyncData = useAsyncData(
+    `product:${id.value}`,
+    () => fetchProduct(Number(id.value)),
+    { watch: [id] },
+  )
+
+  return Object.assign(asyncData, {
+    isLoading: computed(() => asyncData.status.value === 'pending'),
+    isError: computed(() => asyncData.status.value === 'error'),
   })
 }

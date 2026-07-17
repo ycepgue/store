@@ -7,14 +7,36 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { ArrowRight } from '@lucide/vue'
 import { computed } from 'vue'
 import { firstImage } from '@/lib/utils'
 import { AppFooter } from '@/components/layout'
+import { Skeleton } from '@/components/ui/skeleton'
+
+const categoryIcons: Record<string, string> = {
+  electronics: '⚡',
+  clothing: '👕',
+  shoes: '👟',
+  accessories: '🎒',
+  'home-garden': '🏡',
+  sports: '⚽',
+  books: '📚',
+  toys: '🧩',
+}
 
 const router = useRouter()
-const { data: categoriesData } = useCategories()
-const { data: productsData } = useProducts(
+
+useSeoMeta({
+  title: 'Store — магазин электроники и аксессуаров',
+  description: 'Откройте для себя лучшие товары по отличным ценам.',
+  ogTitle: 'Store — магазин электроники и аксессуаров',
+  ogDescription: 'Откройте для себя лучшие товары по отличным ценам.',
+})
+
+const { data: categoriesData, isLoading: isCategoriesLoading } = useCategories()
+const { data: productsData, isLoading: isFeaturedLoading } = useProducts(
   computed(() => ({ limit: 4, sortBy: 'createdAt' as const, sortOrder: 'desc' as const })),
+  'featured-products',
 )
 
 const categories = computed(() => (categoriesData.value ?? []).slice(0, 4))
@@ -54,27 +76,55 @@ const priceFormat = (n: number) =>
         </Button>
       </div>
       <div
-        v-if="categories.length"
-        class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+        v-if="isCategoriesLoading"
+        class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        <Card v-for="i in 4" :key="i" class="flex min-h-43 flex-col">
+          <CardHeader class="flex flex-row items-center gap-4 pb-2">
+            <Skeleton class="size-8 rounded-full" />
+            <Skeleton class="h-4 w-24" />
+          </CardHeader>
+          <CardContent class="flex-1 flex flex-col justify-between gap-3">
+            <div class="space-y-2">
+              <Skeleton class="h-3 w-full" />
+              <Skeleton class="h-3 w-2/3" />
+            </div>
+            <Skeleton class="mt-3 h-4 w-28" />
+          </CardContent>
+        </Card>
+      </div>
+      <div
+        v-else-if="categories.length"
+        class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
       >
         <Card
           v-for="cat in categories"
           :key="cat.id"
-          class="cursor-pointer transition-colors hover:bg-muted/50"
-          @click="router.push('/products')"
+          class="flex min-h-43 flex-col cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg"
+          @click="router.push(`/products?categoryId=${cat.id}`)"
         >
-          <CardHeader class="pb-2">
-            <CardTitle class="text-sm font-medium">
-              {{ cat.name }}
-            </CardTitle>
+          <CardHeader class="flex flex-row items-center gap-4 pb-2">
+            <span class="text-3xl">{{ categoryIcons[cat.slug] ?? '📦' }}</span>
+            <div>
+              <CardTitle class="text-base font-medium">
+                {{ cat.name }}
+              </CardTitle>
+            </div>
           </CardHeader>
-          <CardContent>
-            <CardDescription>{{ cat.slug }}</CardDescription>
+          <CardContent class="flex-1 flex flex-col justify-between">
+            <p class="text-sm text-muted-foreground">
+              {{ cat.description ?? 'Нет описания' }}
+            </p>
+            <div class="mt-3">
+              <Button variant="ghost" size="sm" class="px-0 text-xs">
+                Смотреть товары <ArrowRight class="size-4" />
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
       <div v-else class="py-8 text-center text-muted-foreground">
-        Загрузка категорий...
+        Категории не найдены
       </div>
     </section>
 
@@ -87,7 +137,22 @@ const priceFormat = (n: number) =>
         </Button>
       </div>
       <div
-        v-if="featured.length"
+        v-if="isFeaturedLoading"
+        class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        <Card v-for="i in 4" :key="i" class="overflow-hidden">
+          <Skeleton class="aspect-square w-full rounded-none" />
+          <CardHeader class="pb-2">
+            <Skeleton class="h-4 w-3/4" />
+            <Skeleton class="mt-2 h-3 w-1/2" />
+          </CardHeader>
+          <CardContent>
+            <Skeleton class="h-5 w-16" />
+          </CardContent>
+        </Card>
+      </div>
+      <div
+        v-else-if="featured.length"
         class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
       >
         <Card
@@ -118,7 +183,7 @@ const priceFormat = (n: number) =>
         </Card>
       </div>
       <div v-else class="py-8 text-center text-muted-foreground">
-        Загрузка товаров...
+        Товары не найдены
       </div>
     </section>
 

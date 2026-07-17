@@ -38,14 +38,19 @@ const navLinks = [
       </div>
       <div class="flex items-center gap-2">
         <CartPopover />
-        <button
-          class="inline-flex size-8 items-center justify-center rounded-md transition-colors hover:bg-muted"
-          @click="toggleDark()"
-          :title="isDark ? 'Светлая тема' : 'Тёмная тема'"
-        >
-          <Sun v-if="isDark" class="size-4 text-cyan-500" />
-          <Moon v-else class="size-4 text-cyan-500" />
-        </button>
+        <ClientOnly>
+          <button
+            class="inline-flex size-8 items-center justify-center rounded-md transition-colors hover:bg-muted"
+            @click="toggleDark()"
+            :title="isDark ? 'Светлая тема' : 'Тёмная тема'"
+          >
+            <Sun v-if="isDark" class="size-4 text-cyan-500" />
+            <Moon v-else class="size-4 text-cyan-500" />
+          </button>
+          <template #fallback>
+            <div class="size-8" />
+          </template>
+        </ClientOnly>
       </div>
     </div>
   </header>

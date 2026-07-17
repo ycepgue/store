@@ -1,7 +1,6 @@
-import { apiClient } from './client'
+import { apiBaseUrl } from './client'
 import type { Category } from '@/types'
 
-export async function fetchCategories(): Promise<Category[]> {
-  const { data } = await apiClient().get<Category[]>('/categories')
-  return data
+export function fetchCategories(): Promise<Category[]> {
+  return $fetch<Category[]>('/categories', { baseURL: apiBaseUrl() })
 }

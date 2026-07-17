@@ -1,13 +1,18 @@
-import { useQuery } from '@tanstack/vue-query'
 import { fetchProducts } from '@/api'
 import type { ProductsQuery } from '@/types'
-import { computed, type Ref } from 'vue'
+import type { Ref } from 'vue'
 
-const PRODUCTS_KEY = 'products'
+/**
+ * SSR-friendly products query. Pass a distinct `key` per call site so unrelated
+ * lists (e.g. homepage "featured" vs. catalog) don't share a payload entry.
+ */
+export function useProducts(query: Ref<ProductsQuery>, key = 'products') {
+  const asyncData = useAsyncData(key, () => fetchProducts(query.value), {
+    watch: [query],
+  })
 
-export function useProducts(query: Ref<ProductsQuery>) {
-  return useQuery({
-    queryKey: computed(() => [PRODUCTS_KEY, query.value]),
-    queryFn: () => fetchProducts(query.value),
+  return Object.assign(asyncData, {
+    isLoading: computed(() => asyncData.status.value === 'pending'),
+    isError: computed(() => asyncData.status.value === 'error'),
   })
 }

@@ -11,10 +11,16 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
+import { Skeleton } from '@/components/ui/skeleton'
 import { firstImage } from '@/lib/utils'
 
 const route = useRoute()
 const router = useRouter()
+
+useSeoMeta({
+  title: 'Каталог товаров — Store',
+  description: 'Полный каталог товаров: электроника, аксессуары и многое другое.',
+})
 
 const { addItem } = useCart()
 
@@ -103,9 +109,19 @@ function onSearch() {
 
     <div
       v-if="isLoading"
-      class="flex items-center justify-center py-16 text-muted-foreground"
+      class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
-      Загрузка...
+      <Card v-for="i in limit" :key="i" class="overflow-hidden">
+        <Skeleton class="aspect-square w-full rounded-none" />
+        <CardHeader class="pb-2">
+          <Skeleton class="h-4 w-3/4" />
+          <Skeleton class="mt-2 h-3 w-1/2" />
+        </CardHeader>
+        <CardContent class="flex items-center justify-between">
+          <Skeleton class="h-6 w-20" />
+          <Skeleton class="h-8 w-24" />
+        </CardContent>
+      </Card>
     </div>
 
     <div
