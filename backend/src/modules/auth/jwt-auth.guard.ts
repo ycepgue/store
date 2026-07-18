@@ -9,7 +9,7 @@ import type { Request } from 'express';
 import { JwtPayload } from './auth.service';
 
 export interface AuthenticatedRequest extends Request {
-  user: { id: number; email: string };
+  user: { id: number; email: string; role: string };
 }
 
 @Injectable()
@@ -27,7 +27,11 @@ export class JwtAuthGuard implements CanActivate {
     const token = header.slice('Bearer '.length);
     try {
       const payload = this.jwt.verify<JwtPayload>(token);
-      request.user = { id: payload.sub, email: payload.email };
+      request.user = {
+        id: payload.sub,
+        email: payload.email,
+        role: payload.role ?? 'user',
+      };
       return true;
     } catch {
       throw new UnauthorizedException('Недействительный токен');

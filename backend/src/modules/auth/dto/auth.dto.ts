@@ -25,6 +25,7 @@ export class AuthUserDto {
   id: number;
   email: string;
   name: string | null;
+  role: string;
 }
 
 export class AuthResponseDto {
