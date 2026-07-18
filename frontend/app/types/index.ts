@@ -4,6 +4,14 @@ export interface CategoryBrief {
   slug: string
 }
 
+export interface Review {
+  id: number
+  rating: number
+  comment: string | null
+  author: string
+  createdAt: string
+}
+
 export interface Product {
   id: number
   name: string
@@ -14,7 +22,14 @@ export interface Product {
   stock: number
   categoryId: number
   category?: CategoryBrief
+  reviews?: Review[]
   createdAt: string
+}
+
+export interface CreateReviewPayload {
+  productId: number
+  rating: number
+  comment?: string
 }
 
 export interface PaginatedProducts {
@@ -51,6 +66,7 @@ export interface AuthUser {
   id: number
   email: string
   name: string | null
+  role: string
 }
 
 export interface AuthResponse {

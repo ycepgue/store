@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import OrderStatusBadge from '@/components/order/OrderStatusBadge.vue'
+import OrderStatusProgress from '@/components/order/OrderStatusProgress.vue'
 import { fetchOrders } from '@/api'
 import type { Order } from '@/types'
 
@@ -18,17 +19,6 @@ const priceFormat = (n: number) =>
 
 const dateFormat = (iso: string) =>
   new Date(iso).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
-
-const STATUS: Record<string, { label: string; variant: 'default' | 'secondary' | 'outline' | 'destructive' }> = {
-  pending: { label: 'В обработке', variant: 'secondary' },
-  confirmed: { label: 'Подтверждён', variant: 'default' },
-  shipped: { label: 'В доставке', variant: 'default' },
-  delivered: { label: 'Доставлен', variant: 'outline' },
-  cancelled: { label: 'Отменён', variant: 'destructive' },
-}
-
-const statusInfo = (status: string) =>
-  STATUS[status] ?? { label: status, variant: 'secondary' as const }
 
 const { data: orders, pending, error } = await useAsyncData<Order[]>(
   'my-orders',
@@ -70,12 +60,12 @@ useHead({ title: 'Мои заказы — Store' })
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div class="flex items-center gap-3">
               <span class="font-semibold">Заказ №{{ order.id }}</span>
-              <Badge :variant="statusInfo(order.status).variant">
-                {{ statusInfo(order.status).label }}
-              </Badge>
+              <OrderStatusBadge :status="order.status" />
             </div>
             <span class="text-sm text-muted-foreground">{{ dateFormat(order.createdAt) }}</span>
           </div>
+
+          <OrderStatusProgress :status="order.status" />
 
           <div class="flex flex-col gap-1.5">
             <div
