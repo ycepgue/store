@@ -19,7 +19,7 @@ function goToCheckout() {
 </script>
 
 <template>
-  <div class="flex w-[calc(100vw-1rem)] max-w-[min(360px,var(--reka-popper-available-width,360px))] flex-col bg-card text-card-foreground rounded-xl shadow-xl border border-border">
+  <div class="flex w-[calc(100vw-1rem)] max-w-[min(360px,var(--reka-popper-available-width,360px))] flex-col bg-card text-card-foreground rounded-xl shadow-2xl dark:shadow-[0_16px_48px_-8px_rgba(0,0,0,0.85)] border border-border">
     <!-- Header -->
     <div class="flex items-center justify-between border-b border-border px-4 py-3">
       <div class="flex items-center gap-2">
