@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import { useDark, useToggle } from '@vueuse/core'
-import { Sun, Moon } from '@lucide/vue'
+import { Sun, Moon, User, Package, LogOut } from '@lucide/vue'
 import { CartPopover } from '@/components/cart'
 
 const route = useRoute()
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
+
+const { isAuthenticated, user, logout } = useAuth()
+
+async function onLogout() {
+  logout()
+  await navigateTo('/')
+}
 
 const navLinks = [
   { label: 'Главная', path: '/' },
@@ -38,6 +45,36 @@ const navLinks = [
       </div>
       <div class="flex items-center gap-2">
         <CartPopover />
+        <ClientOnly>
+          <template v-if="isAuthenticated">
+            <NuxtLink
+              to="/orders"
+              class="inline-flex size-8 items-center justify-center rounded-md transition-colors hover:bg-muted"
+              :class="route.path === '/orders' ? 'bg-muted' : ''"
+              :title="user?.name || user?.email || 'Мои заказы'"
+            >
+              <Package class="size-4" />
+            </NuxtLink>
+            <button
+              class="inline-flex size-8 items-center justify-center rounded-md transition-colors hover:bg-muted"
+              title="Выйти"
+              @click="onLogout"
+            >
+              <LogOut class="size-4" />
+            </button>
+          </template>
+          <NuxtLink
+            v-else
+            to="/login"
+            class="inline-flex size-8 items-center justify-center rounded-md transition-colors hover:bg-muted"
+            title="Войти"
+          >
+            <User class="size-4" />
+          </NuxtLink>
+          <template #fallback>
+            <div class="size-8" />
+          </template>
+        </ClientOnly>
         <ClientOnly>
           <button
             class="inline-flex size-8 items-center justify-center rounded-md transition-colors hover:bg-muted"

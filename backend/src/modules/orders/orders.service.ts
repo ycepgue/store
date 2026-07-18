@@ -7,19 +7,40 @@ import { PrismaService } from '../../common/prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderResponseDto } from './dto/order-response.dto';
 
+type OrderWithItems = {
+  id: number;
+  customerName: string;
+  customerEmail: string;
+  phone: string | null;
+  address: string;
+  latitude: number | null;
+  longitude: number | null;
+  deliveryDate: string | null;
+  deliverySlot: string | null;
+  comment: string | null;
+  total: number;
+  status: string;
+  createdAt: Date;
+  items: {
+    id: number;
+    productId: number;
+    quantity: number;
+    price: number;
+    product: { name: string };
+  }[];
+};
+
 @Injectable()
 export class OrdersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateOrderDto): Promise<OrderResponseDto> {
-    // Validate all products and calculate total
+  async create(dto: CreateOrderDto, userId: number): Promise<OrderResponseDto> {
     const order = await this.prisma.$transaction(async (tx) => {
       let total = 0;
       const orderItemsData: {
         productId: number;
         quantity: number;
         price: number;
-        productName: string;
       }[] = [];
 
       for (const item of dto.items) {
@@ -28,7 +49,9 @@ export class OrdersService {
         });
 
         if (!product) {
-          throw new NotFoundException(`Product with ID ${item.productId} not found`);
+          throw new NotFoundException(
+            `Product with ID ${item.productId} not found`,
+          );
         }
 
         if (product.stock < item.quantity) {
@@ -37,8 +60,7 @@ export class OrdersService {
           );
         }
 
-        const itemTotal = product.price * item.quantity;
-        total += itemTotal;
+        total += product.price * item.quantity;
 
         await tx.product.update({
           where: { id: item.productId },
@@ -49,39 +71,61 @@ export class OrdersService {
           productId: product.id,
           quantity: item.quantity,
           price: product.price,
-          productName: product.name,
         });
       }
 
-      const createdOrder = await tx.order.create({
+      return tx.order.create({
         data: {
+          userId,
           customerName: dto.customerName,
           customerEmail: dto.customerEmail,
           phone: dto.phone,
           address: dto.address,
+          latitude: dto.latitude,
+          longitude: dto.longitude,
+          deliveryDate: dto.deliveryDate,
+          deliverySlot: dto.deliverySlot,
+          comment: dto.comment,
           total,
           items: {
-            create: orderItemsData.map((item) => ({
-              productId: item.productId,
-              quantity: item.quantity,
-              price: item.price,
-            })),
+            create: orderItemsData,
           },
         },
         include: {
           items: { include: { product: true } },
         },
       });
-
-      return createdOrder;
+    }, {
+      // The database may be remote (higher latency), so allow more time to
+      // acquire and run the transaction than Prisma's 2s/5s defaults.
+      maxWait: 15000,
+      timeout: 30000,
     });
 
+    return this.toResponse(order);
+  }
+
+  async findMine(userId: number): Promise<OrderResponseDto[]> {
+    const orders = await this.prisma.order.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      include: { items: { include: { product: true } } },
+    });
+    return orders.map((order) => this.toResponse(order));
+  }
+
+  private toResponse(order: OrderWithItems): OrderResponseDto {
     return {
       id: order.id,
       customerName: order.customerName,
       customerEmail: order.customerEmail,
       phone: order.phone,
       address: order.address,
+      latitude: order.latitude,
+      longitude: order.longitude,
+      deliveryDate: order.deliveryDate,
+      deliverySlot: order.deliverySlot,
+      comment: order.comment,
       total: order.total,
       status: order.status,
       items: order.items.map((item) => ({

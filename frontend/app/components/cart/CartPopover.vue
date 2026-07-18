@@ -4,10 +4,16 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 import CartDrawer from './CartDrawer.vue'
 
 const { totalItems } = useCart()
+
+// Close the popover whenever the route changes (e.g. after tapping "Оформить
+// заказ"), since the popover lives in the persistent header.
+const open = ref(false)
+const route = useRoute()
+watch(() => route.fullPath, () => { open.value = false })
 </script>
 
 <template>
-  <Popover>
+  <Popover v-model:open="open">
     <PopoverTrigger as-child>
       <button
         class="relative inline-flex size-8 items-center justify-center rounded-md transition-colors hover:bg-muted"
@@ -26,7 +32,7 @@ const { totalItems } = useCart()
         </ClientOnly>
       </button>
     </PopoverTrigger>
-    <PopoverContent side="bottom" align="end" :side-offset="8" class="bg-transparent border-none shadow-none p-0">
+    <PopoverContent side="bottom" align="end" :side-offset="8" :collision-padding="8" class="w-auto bg-transparent border-none shadow-none p-0">
       <CartDrawer />
     </PopoverContent>
   </Popover>

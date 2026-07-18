@@ -12,6 +12,11 @@ export class OrderResponseDto {
   customerEmail: string;
   phone: string | null;
   address: string;
+  latitude: number | null;
+  longitude: number | null;
+  deliveryDate: string | null;
+  deliverySlot: string | null;
+  comment: string | null;
   total: number;
   status: string;
   items: OrderItemResponseDto[];
