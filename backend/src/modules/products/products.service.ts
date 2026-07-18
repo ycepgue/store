@@ -22,7 +22,7 @@ export class ProductsService {
     }
 
     if (query.search) {
-      where.name = { contains: query.search };
+      where.name = { contains: query.search, mode: 'insensitive' };
     }
 
     const orderBy: Prisma.ProductOrderByWithRelationInput = {};

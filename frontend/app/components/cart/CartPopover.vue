@@ -14,12 +14,16 @@ const { totalItems } = useCart()
         title="Корзина"
       >
         <ShoppingCart class="size-4" />
-        <span
-          v-if="totalItems > 0"
-          class="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground"
-        >
-          {{ totalItems > 99 ? '99+' : totalItems }}
-        </span>
+        <!-- Cart count comes from localStorage (client-only), so keep it out of
+             SSR/hydration to avoid a mismatch with the async layout. -->
+        <ClientOnly>
+          <span
+            v-if="totalItems > 0"
+            class="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground"
+          >
+            {{ totalItems > 99 ? '99+' : totalItems }}
+          </span>
+        </ClientOnly>
       </button>
     </PopoverTrigger>
     <PopoverContent side="bottom" align="end" :side-offset="8" class="bg-transparent border-none shadow-none p-0">

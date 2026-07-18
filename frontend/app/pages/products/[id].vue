@@ -6,12 +6,35 @@ import { imageUrl, firstImage } from '@/lib/utils'
 import { Minus, Plus } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
+// Remount the page when navigating between products so setup (and the 404 check)
+// re-runs and per-product state resets.
+definePageMeta({ key: route => String(route.params.id) })
+
 const route = useRoute()
 const router = useRouter()
 const { items, addItem, updateQuantity, hasItem } = useCart()
 
 const id = computed(() => Number(route.params.id))
-const { data: product, isLoading, isError } = useProduct(id)
+const { data: product, error } = await useProduct(id)
+
+if (error.value || !product.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Товар не найден',
+    fatal: true,
+  })
+}
+
+// Compute meta eagerly here (Nuxt context is active). `firstImage` reads
+// runtimeConfig, which is unavailable inside unhead's lazy getters.
+const loaded = product.value
+useSeoMeta({
+  title: `${loaded.name} — Store`,
+  description: loaded.description ?? 'Подробная информация о товаре.',
+  ogTitle: `${loaded.name} — Store`,
+  ogDescription: loaded.description ?? undefined,
+  ogImage: firstImage(loaded.images),
+})
 
 const quantityInCart = computed(
   () => items.value.find(i => i.product.id === product.value?.id)?.quantity ?? 0,
@@ -32,30 +55,8 @@ const images = computed(() => product.value?.images ?? [])
       ← Назад
     </Button>
 
-    <!-- Loading -->
-    <div
-      v-if="isLoading"
-      class="flex items-center justify-center py-24 text-muted-foreground"
-    >
-      Загрузка...
-    </div>
-
-    <!-- Error -->
-    <div
-      v-else-if="isError"
-      class="flex flex-col items-center gap-3 py-24 text-center"
-    >
-      <p class="text-lg font-medium">Товар не найден</p>
-      <p class="text-sm text-muted-foreground">
-        Возможно, он был удалён или ссылка неверна
-      </p>
-      <Button variant="outline" size="sm" @click="router.push('/products')">
-        Вернуться в каталог
-      </Button>
-    </div>
-
     <!-- Product Detail -->
-    <div v-else-if="product" class="grid gap-8 lg:grid-cols-5">
+    <div v-if="product" class="grid gap-8 lg:grid-cols-5">
       <!-- Images -->
       <div class="space-y-3 lg:col-span-2">
         <div class="aspect-square overflow-hidden bg-muted/20">
