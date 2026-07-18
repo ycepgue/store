@@ -5,6 +5,8 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { createOrder } from '@/api'
 import AddressMap from '@/components/checkout/AddressMap.vue'
+import DatePicker from '@/components/checkout/DatePicker.vue'
+import TimePicker from '@/components/checkout/TimePicker.vue'
 
 const { user, token, isAuthenticated } = useAuth()
 const { items, totalPrice, clearCart } = useCart()
@@ -16,7 +18,6 @@ if (!isAuthenticated.value) {
 const priceFormat = (n: number) =>
   new Intl.NumberFormat('ru-RU').format(n) + ' ₽'
 
-const DELIVERY_SLOTS = ['10:00–12:00', '12:00–14:00', '14:00–16:00', '16:00–18:00', '18:00–20:00']
 const today = new Date().toISOString().slice(0, 10)
 
 const form = reactive({
@@ -27,7 +28,7 @@ const form = reactive({
   latitude: null as number | null,
   longitude: null as number | null,
   deliveryDate: today,
-  deliverySlot: DELIVERY_SLOTS[0],
+  deliverySlot: '12:00',
   comment: '',
 })
 
@@ -133,18 +134,12 @@ useHead({ title: 'Оформление заказа — Store' })
           </CardHeader>
           <CardContent class="grid gap-4 sm:grid-cols-2">
             <div class="flex flex-col gap-1.5">
-              <label for="date" class="text-sm font-medium">Дата доставки</label>
-              <Input id="date" v-model="form.deliveryDate" type="date" :min="today" />
+              <label class="text-sm font-medium">Дата доставки</label>
+              <DatePicker v-model="form.deliveryDate" :min="today" />
             </div>
             <div class="flex flex-col gap-1.5">
-              <label for="slot" class="text-sm font-medium">Интервал</label>
-              <select
-                id="slot"
-                v-model="form.deliverySlot"
-                class="h-8 rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
-              >
-                <option v-for="slot in DELIVERY_SLOTS" :key="slot" :value="slot">{{ slot }}</option>
-              </select>
+              <label class="text-sm font-medium">Время</label>
+              <TimePicker v-model="form.deliverySlot" />
             </div>
           </CardContent>
         </Card>
