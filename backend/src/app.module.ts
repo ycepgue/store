@@ -6,10 +6,12 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { ProductsModule } from './modules/products/products.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
     PrismaModule,
+    AuthModule,
     CategoriesModule,
     ProductsModule,
     OrdersModule,

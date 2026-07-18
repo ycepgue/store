@@ -10,7 +10,7 @@ const priceFormat = (n: number) =>
 </script>
 
 <template>
-  <div class="flex w-[360px] flex-col bg-card text-card-foreground rounded-xl shadow-xl border border-border">
+  <div class="flex w-[calc(100vw-1rem)] max-w-[min(360px,var(--reka-popper-available-width,360px))] flex-col bg-card text-card-foreground rounded-xl shadow-xl border border-border">
     <!-- Header -->
     <div class="flex items-center justify-between border-b border-border px-4 py-3">
       <div class="flex items-center gap-2">
@@ -65,30 +65,30 @@ const priceFormat = (n: number) =>
                 {{ item.product.name }}
               </p>
               <button
-                class="mt-0.5 shrink-0 text-muted-foreground transition-colors hover:text-destructive"
+                class="-mr-1 -mt-1 inline-flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-destructive"
                 @click="removeItem(item.product.id)"
               >
-                <Trash2 class="size-3" />
+                <Trash2 class="size-3.5" />
               </button>
             </div>
             <p class="text-xs text-muted-foreground">
               {{ priceFormat(item.product.price) }}
             </p>
-            <div class="flex items-center gap-1">
+            <div class="flex items-center gap-1.5">
               <button
-                class="inline-flex size-5 items-center justify-center rounded border border-border transition-colors hover:bg-muted"
+                class="inline-flex size-7 items-center justify-center rounded-md border border-border transition-colors hover:bg-muted"
                 @click="updateQuantity(item.product.id, item.quantity - 1)"
               >
-                <Minus class="size-2.5" />
+                <Minus class="size-3.5" />
               </button>
-              <span class="w-6 text-center text-xs tabular-nums">
+              <span class="w-7 text-center text-sm tabular-nums">
                 {{ item.quantity }}
               </span>
               <button
-                class="inline-flex size-5 items-center justify-center rounded border border-border transition-colors hover:bg-muted"
+                class="inline-flex size-7 items-center justify-center rounded-md border border-border transition-colors hover:bg-muted"
                 @click="updateQuantity(item.product.id, item.quantity + 1)"
               >
-                <Plus class="size-2.5" />
+                <Plus class="size-3.5" />
               </button>
               <span class="ml-auto text-xs font-semibold tabular-nums">
                 {{ priceFormat(item.product.price * item.quantity) }}
@@ -110,13 +110,13 @@ const priceFormat = (n: number) =>
       <div class="flex gap-2">
         <Button
           variant="outline"
-          size="xs"
+          size="default"
           class="flex-1"
           @click="clearCart"
         >
           Очистить
         </Button>
-        <Button size="xs" class="flex-1">
+        <Button size="default" class="flex-[2]" @click="navigateTo('/checkout')">
           Оформить заказ
         </Button>
       </div>

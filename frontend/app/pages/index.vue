@@ -14,14 +14,11 @@ import { AppFooter } from '@/components/layout'
 import { Skeleton } from '@/components/ui/skeleton'
 
 const categoryIcons: Record<string, string> = {
-  electronics: '⚡',
-  clothing: '👕',
-  shoes: '👟',
-  accessories: '🎒',
-  'home-garden': '🏡',
-  sports: '⚽',
-  books: '📚',
-  toys: '🧩',
+  elektronika: '⚡',
+  odezhda: '👕',
+  'dom-i-sad': '🏡',
+  sport: '⚽',
+  knigi: '📚',
 }
 
 const router = useRouter()

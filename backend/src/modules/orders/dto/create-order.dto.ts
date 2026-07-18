@@ -6,6 +6,7 @@ import {
   ValidateNested,
   ArrayMinSize,
   IsInt,
+  IsNumber,
   Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -35,6 +36,26 @@ export class CreateOrderDto {
 
   @IsString()
   address: string;
+
+  @IsOptional()
+  @IsNumber()
+  latitude?: number;
+
+  @IsOptional()
+  @IsNumber()
+  longitude?: number;
+
+  @IsOptional()
+  @IsString()
+  deliveryDate?: string;
+
+  @IsOptional()
+  @IsString()
+  deliverySlot?: string;
+
+  @IsOptional()
+  @IsString()
+  comment?: string;
 
   @IsArray()
   @ArrayMinSize(1)
