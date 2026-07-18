@@ -3,17 +3,17 @@ import { ShoppingCart } from '@lucide/vue'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 import CartDrawer from './CartDrawer.vue'
 
-const { totalItems } = useCart()
+// `isOpen` is shared via useCart so adding the first item can open the cart.
+const { totalItems, isOpen } = useCart()
 
 // Close the popover whenever the route changes (e.g. after tapping "Оформить
 // заказ"), since the popover lives in the persistent header.
-const open = ref(false)
 const route = useRoute()
-watch(() => route.fullPath, () => { open.value = false })
+watch(() => route.fullPath, () => { isOpen.value = false })
 </script>
 
 <template>
-  <Popover v-model:open="open">
+  <Popover v-model:open="isOpen">
     <PopoverTrigger as-child>
       <button
         class="relative inline-flex size-8 items-center justify-center rounded-md transition-colors hover:bg-muted"

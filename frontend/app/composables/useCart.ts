@@ -10,6 +10,9 @@ function persist(items: CartItem[]) {
 
 export function useCart() {
   const items = useState<CartItem[]>('cart-items', () => [])
+  // Shared open state for the cart popover so it can be opened programmatically
+  // (e.g. right after the first item is added).
+  const isOpen = useState<boolean>('cart-open', () => false)
 
   const totalItems = computed(() =>
     items.value.reduce((sum, item) => sum + item.quantity, 0),
@@ -20,6 +23,7 @@ export function useCart() {
   )
 
   function addItem(product: Product, quantity = 1) {
+    const wasEmpty = items.value.length === 0
     const existing = items.value.find(i => i.product.id === product.id)
     if (existing) {
       existing.quantity += quantity
@@ -27,6 +31,10 @@ export function useCart() {
       items.value.push({ product, quantity })
     }
     persist(items.value)
+    // Open the cart automatically when the first item lands in an empty cart.
+    if (wasEmpty) {
+      isOpen.value = true
+    }
   }
 
   function removeItem(productId: number) {
@@ -60,6 +68,7 @@ export function useCart() {
 
   return {
     items,
+    isOpen,
     totalItems,
     totalPrice,
     addItem,
