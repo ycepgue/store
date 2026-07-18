@@ -21,14 +21,11 @@ const { data: categoriesData, isLoading } = useCategories()
 const categories = computed(() => categoriesData.value ?? [])
 
 const categoryIcons: Record<string, string> = {
-  electronics: '⚡',
-  clothing: '👕',
-  shoes: '👟',
-  accessories: '🎒',
-  'home-garden': '🏡',
-  sports: '⚽',
-  books: '📚',
-  toys: '🧩',
+  elektronika: '⚡',
+  odezhda: '👕',
+  'dom-i-sad': '🏡',
+  sport: '⚽',
+  knigi: '📚',
 }
 </script>
 
