@@ -3,7 +3,7 @@ import { VueQueryPlugin } from '@tanstack/vue-query'
 import App from './App.vue'
 import router from './router'
 import { AUTH_EXPIRED_EVENT } from '@/api/client'
-import { useAuth } from '@/composables/useAuth'
+import { useAuth } from '@/pages/auth'
 import './assets/index.css'
 
 const app = createApp(App)

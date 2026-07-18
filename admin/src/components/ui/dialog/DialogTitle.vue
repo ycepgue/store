@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DialogTitle, type DialogTitleProps } from 'reka-ui'
-import { cn } from '@/lib/utils'
+import { cn } from '@/libs/utils'
 import type { HTMLAttributes } from 'vue'
 
 const props = defineProps<DialogTitleProps & {

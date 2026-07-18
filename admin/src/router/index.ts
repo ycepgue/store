@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuth } from '@/composables/useAuth'
+import { useAuth } from '@/pages/auth'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/pages/Login.vue'),
+      component: () => import('@/pages/auth/Login.vue'),
       meta: { public: true },
     },
     {
@@ -17,22 +17,22 @@ const router = createRouter({
         {
           path: '',
           name: 'dashboard',
-          component: () => import('@/pages/Dashboard.vue'),
+          component: () => import('@/pages/dashboard/Dashboard.vue'),
         },
         {
           path: 'products',
           name: 'products',
-          component: () => import('@/pages/Products.vue'),
+          component: () => import('@/pages/products/Products.vue'),
         },
         {
           path: 'categories',
           name: 'categories',
-          component: () => import('@/pages/Categories.vue'),
+          component: () => import('@/pages/categories/Categories.vue'),
         },
         {
           path: 'orders',
           name: 'orders',
-          component: () => import('@/pages/Orders.vue'),
+          component: () => import('@/pages/orders/Orders.vue'),
         },
       ],
     },

@@ -10,8 +10,8 @@ import {
   LogOut,
 } from '@lucide/vue'
 import { Button } from '@/components/ui/button'
-import { useAuth } from '@/composables/useAuth'
-import { useTheme } from '@/composables/useTheme'
+import { useAuth } from '@/pages/auth'
+import { useTheme } from '@/libs/use-theme'
 import { useRouter } from 'vue-router'
 
 const { user, logout } = useAuth()
