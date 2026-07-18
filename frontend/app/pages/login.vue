@@ -4,13 +4,11 @@ import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { login as loginRequest } from '@/api'
 
-const { setSession, isAuthenticated } = useAuth()
+definePageMeta({ middleware: 'guest' })
+
+const { setSession } = useAuth()
 const route = useRoute()
 const redirect = computed(() => (route.query.redirect as string) || '/orders')
-
-if (isAuthenticated.value) {
-  await navigateTo(redirect.value)
-}
 
 const email = ref('')
 const password = ref('')

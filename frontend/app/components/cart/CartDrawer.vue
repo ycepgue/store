@@ -4,9 +4,18 @@ import { firstImage } from '@/lib/utils'
 import { ShoppingCart, Minus, Plus, Trash2 } from '@lucide/vue'
 
 const { items, totalItems, totalPrice, updateQuantity, removeItem, clearCart } = useCart()
+const { isAuthenticated } = useAuth()
 
 const priceFormat = (n: number) =>
   new Intl.NumberFormat('ru-RU').format(n) + ' ₽'
+
+// Resolve the destination up front so we never trigger a mid-navigation
+// redirect (which orphans the page transition). Guests go straight to login.
+function goToCheckout() {
+  return navigateTo(
+    isAuthenticated.value ? '/checkout' : '/login?redirect=/checkout',
+  )
+}
 </script>
 
 <template>
@@ -116,7 +125,7 @@ const priceFormat = (n: number) =>
         >
           Очистить
         </Button>
-        <Button size="default" class="flex-[2]" @click="navigateTo('/checkout')">
+        <Button size="default" class="flex-[2]" @click="goToCheckout">
           Оформить заказ
         </Button>
       </div>

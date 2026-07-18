@@ -6,12 +6,10 @@ import { Separator } from '@/components/ui/separator'
 import { fetchOrders } from '@/api'
 import type { Order } from '@/types'
 
-const { token, isAuthenticated } = useAuth()
-const route = useRoute()
+definePageMeta({ middleware: 'auth' })
 
-if (!isAuthenticated.value) {
-  await navigateTo('/login?redirect=/orders')
-}
+const { token } = useAuth()
+const route = useRoute()
 
 const placedId = computed(() => route.query.placed as string | undefined)
 

@@ -20,7 +20,10 @@ export default defineNuxtConfig({
   },
 
   app: {
-    pageTransition: { name: 'page', mode: 'out-in' },
+    // NOTE: `mode: 'out-in'` wedges the <Transition> when a navigation is
+    // redirected mid-flight (e.g. an auth middleware sending a guest to /login),
+    // permanently freezing <NuxtPage>. A simultaneous transition tolerates that.
+    pageTransition: { name: 'page' },
 
     head: {
       title: 'Store',

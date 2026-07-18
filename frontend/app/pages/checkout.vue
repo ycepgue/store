@@ -8,12 +8,10 @@ import AddressMap from '@/components/checkout/AddressMap.vue'
 import DatePicker from '@/components/checkout/DatePicker.vue'
 import TimePicker from '@/components/checkout/TimePicker.vue'
 
-const { user, token, isAuthenticated } = useAuth()
-const { items, totalPrice, clearCart } = useCart()
+definePageMeta({ middleware: 'auth' })
 
-if (!isAuthenticated.value) {
-  await navigateTo('/login?redirect=/checkout')
-}
+const { user, token } = useAuth()
+const { items, totalPrice, clearCart } = useCart()
 
 const priceFormat = (n: number) =>
   new Intl.NumberFormat('ru-RU').format(n) + ' ₽'
