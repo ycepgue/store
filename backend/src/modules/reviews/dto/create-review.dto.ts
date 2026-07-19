@@ -1,4 +1,4 @@
-import { IsInt, IsString, IsOptional, Min, Max, MaxLength, MinLength } from 'class-validator';
+import { IsInt, IsString, IsOptional, Min, Max, MaxLength } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateReviewDto {
@@ -17,9 +17,4 @@ export class CreateReviewDto {
   @IsString()
   @MaxLength(1000)
   comment?: string;
-
-  @IsString()
-  @MinLength(1)
-  @MaxLength(100)
-  author: string;
 }

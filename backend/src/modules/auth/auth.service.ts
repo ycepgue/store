@@ -15,6 +15,7 @@ import {
 export interface JwtPayload {
   sub: number;
   email: string;
+  role: string;
 }
 
 @Injectable()
@@ -36,7 +37,7 @@ export class AuthService {
       data: { email, password, name: dto.name?.trim() || null },
     });
 
-    return this.buildResponse(user.id, user.email, user.name);
+    return this.buildResponse(user.id, user.email, user.name, user.role);
   }
 
   async login(dto: LoginDto): Promise<AuthResponseDto> {
@@ -46,15 +47,16 @@ export class AuthService {
       throw new UnauthorizedException('Неверная почта или пароль');
     }
 
-    return this.buildResponse(user.id, user.email, user.name);
+    return this.buildResponse(user.id, user.email, user.name, user.role);
   }
 
   private buildResponse(
     id: number,
     email: string,
     name: string | null,
+    role: string,
   ): AuthResponseDto {
-    const token = this.jwt.sign({ sub: id, email } satisfies JwtPayload);
-    return { token, user: { id, email, name } };
+    const token = this.jwt.sign({ sub: id, email, role } satisfies JwtPayload);
+    return { token, user: { id, email, name, role } };
   }
 }

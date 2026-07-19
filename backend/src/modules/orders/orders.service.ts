@@ -6,6 +6,7 @@ import {
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderResponseDto } from './dto/order-response.dto';
+import { OrderStatus } from './dto/update-order-status.dto';
 
 type OrderWithItems = {
   id: number;
@@ -112,6 +113,31 @@ export class OrdersService {
       include: { items: { include: { product: true } } },
     });
     return orders.map((order) => this.toResponse(order));
+  }
+
+  async findAll(): Promise<OrderResponseDto[]> {
+    const orders = await this.prisma.order.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: { items: { include: { product: true } } },
+    });
+    return orders.map((order) => this.toResponse(order));
+  }
+
+  async updateStatus(
+    id: number,
+    status: OrderStatus,
+  ): Promise<OrderResponseDto> {
+    const existing = await this.prisma.order.findUnique({ where: { id } });
+    if (!existing) {
+      throw new NotFoundException(`Order with ID ${id} not found`);
+    }
+
+    const order = await this.prisma.order.update({
+      where: { id },
+      data: { status },
+      include: { items: { include: { product: true } } },
+    });
+    return this.toResponse(order);
   }
 
   private toResponse(order: OrderWithItems): OrderResponseDto {

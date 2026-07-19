@@ -35,7 +35,7 @@ watch(() => route.fullPath, () => { isMenuOpen.value = false })
 </script>
 
 <template>
-  <header class="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm">
+  <header class="sticky top-0 z-50 border-b border-border bg-background/80 shadow-sm dark:shadow-[0_2px_10px_rgba(0,0,0,0.6)] backdrop-blur-sm">
     <div class="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
       <div class="flex items-center gap-3 sm:gap-6">
         <Sheet v-model:open="isMenuOpen">

@@ -2,9 +2,13 @@
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+import StarRating from '@/components/review/StarRating.vue'
+import ProductReviews from '@/components/review/ProductReviews.vue'
+import { fetchOrders } from '@/api'
 import { imageUrl, firstImage } from '@/lib/utils'
 import { Minus, Plus } from '@lucide/vue'
 import { computed, ref } from 'vue'
+import type { Order } from '@/types'
 
 // Remount the page when navigating between products so setup (and the 404 check)
 // re-runs and per-product state resets.
@@ -15,7 +19,7 @@ const router = useRouter()
 const { items, addItem, updateQuantity, hasItem } = useCart()
 
 const id = computed(() => Number(route.params.id))
-const { data: product, error } = await useProduct(id)
+const { data: product, error, refresh } = await useProduct(id)
 
 if (error.value || !product.value) {
   throw createError({
@@ -46,6 +50,29 @@ const priceFormat = (n: number) =>
 const selectedImage = ref(0)
 
 const images = computed(() => product.value?.images ?? [])
+
+const reviews = computed(() => product.value?.reviews ?? [])
+const reviewCount = computed(() => reviews.value.length)
+const averageRating = computed(() =>
+  reviewCount.value === 0
+    ? 0
+    : reviews.value.reduce((sum, r) => sum + r.rating, 0) / reviewCount.value,
+)
+
+// Право на отзыв: пользователь должен был заказывать этот товар.
+const { token, isAuthenticated } = useAuth()
+const { data: myOrders } = await useAsyncData<Order[]>(
+  `my-orders-review:${id.value}`,
+  () =>
+    isAuthenticated.value && token.value
+      ? fetchOrders(token.value)
+      : Promise.resolve([]),
+)
+const canReview = computed(() =>
+  (myOrders.value ?? []).some(order =>
+    order.items.some(item => item.productId === product.value?.id),
+  ),
+)
 </script>
 
 <template>
@@ -105,6 +132,15 @@ const images = computed(() => product.value?.images ?? [])
           <h1 class="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
             {{ product.name }}
           </h1>
+          <a
+            v-if="reviewCount > 0"
+            href="#reviews"
+            class="mt-2 inline-flex items-center gap-2 text-sm transition-opacity hover:opacity-80"
+          >
+            <StarRating :rating="Math.round(averageRating)" size="sm" />
+            <span class="font-medium">{{ averageRating.toFixed(1) }}</span>
+            <span class="text-muted-foreground">· {{ reviewCount }} отзыв(ов)</span>
+          </a>
         </div>
 
         <div class="flex items-center gap-3">
@@ -152,6 +188,17 @@ const images = computed(() => product.value?.images ?? [])
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Отзывы -->
+    <div v-if="product" id="reviews" class="scroll-mt-20">
+      <Separator class="mb-6" />
+      <ProductReviews
+        :product-id="product.id"
+        :reviews="reviews"
+        :can-review="canReview"
+        @submitted="refresh"
+      />
     </div>
   </div>
 </template>
